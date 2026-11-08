@@ -5,27 +5,44 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import java.io.File;
+import net.kdt.pojavlaunch.value.MinecraftAccount;
 
-/**
- * Explicit launch bridge for the companion Rinaorc Engine app.
- * Only the project's pinned snapshot is accepted.
- */
+import java.io.File;
+import java.util.regex.Pattern;
+
+/** Rinaorc bridge: starts the pinned game version with a saved local username profile. */
 public final class RinaorcBridgeActivity extends Activity {
     public static final String EXTRA_VERSION = "net.rinaorc.engine.EXTRA_VERSION";
+    public static final String EXTRA_USERNAME = "net.rinaorc.engine.EXTRA_USERNAME";
     private static final String TARGET_VERSION = "26.3-snapshot-1";
 
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         String requested = getIntent().getStringExtra(EXTRA_VERSION);
+        String username = getIntent().getStringExtra(EXTRA_USERNAME);
         if (!TARGET_VERSION.equals(requested)) {
             Toast.makeText(this, "Version Rinaorc non autorisée.", Toast.LENGTH_LONG).show();
             finish();
             return;
         }
+        if (username == null || !Pattern.matches("[A-Za-z0-9_]{3,16}", username)) {
+            Toast.makeText(this, "Entre un pseudo valide dans Rinaorc Launcher.", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
 
         try {
+            // Amethyst's native local-account format: accessToken=0 means offline/local profile.
+            MinecraftAccount account = MinecraftAccount.load(username);
+            if (account == null) account = new MinecraftAccount();
+            account.username = username;
+            account.accessToken = "0";
+            account.clientToken = "0";
+            account.isMicrosoft = false;
+            account.save();
+            PojavProfile.setCurrentProfile(this, username);
+
             File versionJson = new File(
                 Tools.DIR_HOME_VERSION,
                 TARGET_VERSION + File.separator + TARGET_VERSION + ".json"
