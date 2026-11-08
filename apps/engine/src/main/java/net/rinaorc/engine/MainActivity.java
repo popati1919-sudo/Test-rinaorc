@@ -73,7 +73,7 @@ public final class MainActivity extends Activity {
         card("VERSION CIBLE", "Minecraft " + TARGET_VERSION + "\nVersion présélectionnée pour ce projet.");
         card("MOTEUR", "Amethyst Android • branche v3_openjdk");
 
-        Button launch = button("OUVRIR AMETHYST");
+        Button launch = button("LANCER MINECRAFT 26.3");
         launch.setOnClickListener(v -> launchAmethyst());
         root.addView(launch, params(0, dp(54)));
 
@@ -93,7 +93,7 @@ public final class MainActivity extends Activity {
         diag.setOnClickListener(v -> showDiagnostics());
         root.addView(diag, params(0, dp(48)));
 
-        TextView foot = label("Le menu règle les préférences locales. La sélection et le lancement automatique du profil 26.3 dans Amethyst nécessitent une intégration moteur dédiée.", 12, Color.rgb(137, 148, 171));
+        TextView foot = label("Le pont Rinaorc lance directement 26.3 si la version est installée et si un profil Amethyst est déjà configuré. Sinon, Amethyst s’ouvre pour terminer la préparation.", 12, Color.rgb(137, 148, 171));
         foot.setPadding(0, dp(22), 0, 0);
         root.addView(foot);
     }
