@@ -1,0 +1,38 @@
+name: Build APK depuis le ZIP
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Décompresser le projet
+        run: unzip -q Rinaorc-Mobile.zip
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.10.2
+
+      - name: Tests de core/common
+        working-directory: Rinaorc-Mobile
+        run: bash scripts/test-core.sh
+
+      - name: Compiler l'APK
+        working-directory: Rinaorc-Mobile
+        run: gradle :apps:launcher:assembleDebug
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Rinaorc-Launcher
+          path: Rinaorc-Mobile/apps/launcher/build/outputs/apk/debug/*.apk
