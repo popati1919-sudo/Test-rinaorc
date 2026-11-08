@@ -7,7 +7,7 @@ on:
 permissions:
   contents: read
 jobs:
-  android:
+  rinaorc-apps:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,14 +18,37 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
-      - name: Build all three applications
+      - name: Build Rinaorc Launcher, Engine and Control
         run: gradle assembleDebug
-      - name: Upload APKs
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: rinaorc-mobile-debug-apks
+          name: rinaorc-mobile-apps
           path: |
             apps/launcher/build/outputs/apk/debug/*.apk
             apps/engine/build/outputs/apk/debug/*.apk
             apps/control/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+  amethyst-engine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - name: Install Android SDK and NDK
+        run: sdkmanager "platforms;android-37" "build-tools;37.0.0" "ndk;27.3.13750724"
+      - name: Clone Amethyst source
+        run: git clone --recursive --branch v3_openjdk https://github.com/AngelAuraMC/Amethyst-Android.git .amethyst
+      - name: Add Rinaorc 26.3 launch bridge
+        run: bash scripts/patch-amethyst.sh "$GITHUB_WORKSPACE/.amethyst"
+      - name: Build patched Amethyst
+        working-directory: .amethyst
+        run: ./gradlew --no-daemon :app_pojavlauncher:assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rinaorc-amethyst-engine-26.3
+          path: .amethyst/app_pojavlauncher/build/outputs/apk/debug/*.apk
           if-no-files-found: error
