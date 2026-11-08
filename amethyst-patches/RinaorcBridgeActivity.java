@@ -34,7 +34,9 @@ public final class RinaorcBridgeActivity extends Activity {
                 Toast.makeText(this,
                     "Installe d'abord " + TARGET_VERSION + " dans Amethyst, puis relance Rinaorc.",
                     Toast.LENGTH_LONG).show();
-                startActivity(new Intent(this, LauncherActivity.class));
+                Intent launcher = new Intent(this, LauncherActivity.class);
+                launcher.putExtra(EXTRA_VERSION, TARGET_VERSION);
+                startActivity(launcher);
                 finish();
                 return;
             }
