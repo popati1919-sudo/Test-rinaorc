@@ -4,4 +4,4 @@ dependencyResolutionManagement {
     repositories { google(); mavenCentral() }
 }
 rootProject.name = "RinaorcMobile"
-include(":apps:engine")
+include(":apps:engine", ":apps:launcher", ":apps:control")
