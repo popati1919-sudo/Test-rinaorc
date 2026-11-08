@@ -18,7 +18,6 @@ if [ ! -x "$GRADLE_BIN" ]; then
   echo "Téléchargement de Gradle $GRADLE_VERSION..."
   curl -fL "https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip" -o "$ARCHIVE"
   unzip -q -o "$ARCHIVE" -d "$HOME/.local"
-  mv "$HOME/.local/gradle-$GRADLE_VERSION" "$GRADLE_HOME"
 fi
 
 if [ -z "${ANDROID_HOME:-}" ] && [ -z "${ANDROID_SDK_ROOT:-}" ]; then
