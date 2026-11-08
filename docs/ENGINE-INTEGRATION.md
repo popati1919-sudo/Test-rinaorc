@@ -10,14 +10,16 @@
 
 Le README upstream annonce les versions Minecraft jusqu'à `26.3-snapshot-1`. Il liste OpenJDK mobile 8, 17 et 21 ; il ne prouve pas à lui seul que le runtime requis pour cette snapshot est disponible dans chaque build.
 
-## Pourquoi le menu ne force pas encore la version
-Le dépôt upstream ne documente pas d'API publique stable permettant à une autre application Android de choisir et lancer une version Minecraft. Le module Engine actuel ouvre l'activité Amethyst installée. Il ne transmet pas de faux extras Intent, ne lit pas les fichiers privés d'Amethyst et ne prétend pas lancer le jeu automatiquement.
+## Pont Rinaorc
+Le workflow GitHub clone Amethyst depuis la branche `v3_openjdk`, ajoute `RinaorcBridgeActivity`, puis compile un APK Amethyst debug dédié. Le pont accepte uniquement `26.3-snapshot-1` et transmet cette version à l'activité de jeu Amethyst via sa constante interne `MainActivity.INTENT_MINECRAFT_VERSION` (valeur `intent_version`).
 
-## Prochaine intégration nécessaire
-1. Cloner Amethyst avec ses sous-modules et conserver ses licences.
-2. Examiner les classes de sélection de version et de démarrage dans `app_pojavlauncher`.
-3. Ajouter une interface interne ou une activité explicite prise en charge pour sélectionner `26.3-snapshot-1`.
-4. Vérifier le runtime Java requis pour cette version et l'ABI `arm64-v8a`.
-5. Tester l'installation, le téléchargement de la version, l'écran titre et la connexion au serveur Rinaorc sur appareil réel.
+Le bouton « Lancer Minecraft 26.3 » de Rinaorc Engine ouvre ce pont. Conditions préalables :
+1. Installer l'APK Amethyst compilé par le workflow Rinaorc (pas un build upstream sans pont).
+2. Ouvrir Amethyst une première fois et terminer sa configuration, notamment le profil/compte.
+3. Installer/télécharger `26.3-snapshot-1` dans Amethyst au moins une fois.
+4. Revenir dans Rinaorc Engine et appuyer sur « Lancer Minecraft 26.3 ».
 
-Ne pas marquer l'intégration terminée avant ces tests.
+Si la version n'est pas installée, le pont ouvre Amethyst pour permettre sa préparation. Le téléchargement initial de la version n'est pas encore automatisé par Rinaorc.
+
+## Validation requise
+Le dépôt upstream annonce la version cible, mais la compatibilité effective du runtime Java et le lancement sur Galaxy S21/Android 15 doivent être testés sur appareil. Ne pas annoncer le jeu comme opérationnel avant ce test et une connexion réelle au serveur Rinaorc.
