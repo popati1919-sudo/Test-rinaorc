@@ -38,6 +38,10 @@ public final class MainActivity extends Activity {
         getWindow().setStatusBarColor(Color.rgb(12, 15, 24));
         getWindow().setNavigationBarColor(Color.rgb(12, 15, 24));
         prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+        String incomingUsername = getIntent().getStringExtra("net.rinaorc.engine.EXTRA_USERNAME");
+        if (incomingUsername != null && incomingUsername.matches("[A-Za-z0-9_]{3,16}")) {
+            prefs.edit().putString("rinaorc_username", incomingUsername).apply();
+        }
         buildUi();
     }
 
@@ -202,6 +206,8 @@ public final class MainActivity extends Activity {
             Intent intent = new Intent();
             intent.setClassName(pkg, "net.kdt.pojavlaunch.RinaorcBridgeActivity");
             intent.putExtra("net.rinaorc.engine.EXTRA_VERSION", TARGET_VERSION);
+            intent.putExtra("net.rinaorc.engine.EXTRA_USERNAME",
+                prefs.getString("rinaorc_username", ""));
             startActivity(intent);
         } catch (Exception e) {
             new AlertDialog.Builder(this)
