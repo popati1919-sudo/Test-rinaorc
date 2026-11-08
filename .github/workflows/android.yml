@@ -1,0 +1,28 @@
+name: Android build
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  engine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - name: Build Engine APK
+        run: gradle :apps:engine:assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: rinaorc-engine-debug
+          path: apps/engine/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
