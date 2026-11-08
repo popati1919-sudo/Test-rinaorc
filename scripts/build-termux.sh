@@ -11,5 +11,5 @@ if [ -z "${ANDROID_HOME:-}" ] && [ -z "${ANDROID_SDK_ROOT:-}" ]; then
   echo "ANDROID_HOME/ANDROID_SDK_ROOT absent. Configure ton SDK Android avant la compilation."
   exit 1
 fi
-gradle --no-daemon :apps:engine:assembleDebug
-echo "APK : apps/engine/build/outputs/apk/debug/engine-debug.apk"
+gradle --no-daemon assembleDebug
+echo "APK : apps/*/build/outputs/apk/debug/*.apk"
