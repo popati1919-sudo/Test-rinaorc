@@ -1,35 +1,13 @@
-name: Android build
+name: Rinaorc Mobile — single APK
 on:
   push:
-    branches: [ main ]
+    branches: [ main, feature/rinaorc-one-apk ]
   pull_request:
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  rinaorc-apps:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-      - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.11.1'
-      - name: Build Rinaorc Launcher, Engine and Control
-        run: gradle assembleDebug
-      - uses: actions/upload-artifact@v4
-        with:
-          name: rinaorc-mobile-apps
-          path: |
-            apps/launcher/build/outputs/apk/debug/*.apk
-            apps/engine/build/outputs/apk/debug/*.apk
-            apps/control/build/outputs/apk/debug/*.apk
-          if-no-files-found: error
-
-  amethyst-engine:
+  single-apk:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -48,17 +26,21 @@ jobs:
           "$SDKMANAGER" --channel=3 "platforms;android-37.1" "build-tools;36.0.0" "ndk;27.3.13750724"
       - name: Clone Amethyst source
         run: git clone --recursive --branch v3_openjdk https://github.com/AngelAuraMC/Amethyst-Android.git .amethyst
-      - name: Add Rinaorc 26.3 launch bridge
+      - name: Integrate Rinaorc into Amethyst
         run: bash scripts/patch-amethyst.sh "$GITHUB_WORKSPACE/.amethyst"
       - name: Configure Amethyst Java toolchains
         working-directory: .amethyst
-        run: |
-          echo "org.gradle.java.installations.paths=$JAVA_HOME_8_X64,$JAVA_HOME_21_X64" >> gradle.properties
-      - name: Build patched Amethyst
+        run: echo "org.gradle.java.installations.paths=$JAVA_HOME_8_X64,$JAVA_HOME_21_X64" >> gradle.properties
+      - name: Build the single Rinaorc APK
         working-directory: .amethyst
-        run: ./gradlew --no-daemon :app_pojavlauncher:assembleDebug
+        run: |
+          ./gradlew --no-daemon :app_pojavlauncher:assembleDebug
+          APK="$(find app_pojavlauncher/build/outputs/apk/debug -type f -name '*.apk' | head -n 1)"
+          test -n "$APK"
+          mkdir -p "$GITHUB_WORKSPACE/dist"
+          cp "$APK" "$GITHUB_WORKSPACE/dist/Rinaorc-Mobile.apk"
       - uses: actions/upload-artifact@v4
         with:
-          name: rinaorc-amethyst-engine-26.3
-          path: .amethyst/app_pojavlauncher/build/outputs/apk/debug/*.apk
+          name: Rinaorc-Mobile
+          path: dist/Rinaorc-Mobile.apk
           if-no-files-found: error
