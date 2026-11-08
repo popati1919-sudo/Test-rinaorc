@@ -7,7 +7,7 @@ on:
 permissions:
   contents: read
 jobs:
-  engine:
+  android:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,11 +18,14 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
-      - name: Build Engine APK
-        run: gradle :apps:engine:assembleDebug
-      - name: Upload APK
+      - name: Build all three applications
+        run: gradle assembleDebug
+      - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
-          name: rinaorc-engine-debug
-          path: apps/engine/build/outputs/apk/debug/*.apk
+          name: rinaorc-mobile-debug-apks
+          path: |
+            apps/launcher/build/outputs/apk/debug/*.apk
+            apps/engine/build/outputs/apk/debug/*.apk
+            apps/control/build/outputs/apk/debug/*.apk
           if-no-files-found: error
