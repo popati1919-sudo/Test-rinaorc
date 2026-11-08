@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public final class RinaorcBridgeActivity extends Activity {
     public static final String EXTRA_VERSION = "net.rinaorc.engine.EXTRA_VERSION";
     public static final String EXTRA_USERNAME = "net.rinaorc.engine.EXTRA_USERNAME";
-    private static final String TARGET_VERSION = "26.3-snapshot-1";
+    private static final String TARGET_VERSION = "26.3";
 
     @Override
     protected void onCreate(Bundle state) {
