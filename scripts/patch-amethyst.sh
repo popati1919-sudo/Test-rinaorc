@@ -31,7 +31,7 @@ needle = '''        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pojav_launcher);'''
 replacement = '''        super.onCreate(savedInstanceState);
         String rinaorcVersion = getIntent().getStringExtra("net.rinaorc.engine.EXTRA_VERSION");
-        if ("26.3-snapshot-1".equals(rinaorcVersion)) {
+        if ("26.3".equals(rinaorcVersion)) {
             LauncherProfiles.load();
             String selectedId = LauncherPreferences.DEFAULT_PREF.getString(
                 LauncherPreferences.PREF_KEY_CURRENT_PROFILE, "");
