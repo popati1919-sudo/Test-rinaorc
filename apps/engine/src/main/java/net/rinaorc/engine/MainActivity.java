@@ -25,7 +25,7 @@ import java.util.Locale;
 
 public final class MainActivity extends Activity {
     private static final String PREFS = "rinaorc_engine";
-    private static final String TARGET_VERSION = "26.3-snapshot-1";
+    private static final String TARGET_VERSION = "26.3";
     private static final String[] AMETHYST_PACKAGES = {
         "org.angelauramc.amethyst", "org.angelauramc.amethyst.debug"
     };
