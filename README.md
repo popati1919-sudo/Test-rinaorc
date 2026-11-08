@@ -14,7 +14,7 @@ Projet Android ARM64 pour préparer le lancement de Minecraft Java Edition avec 
 - `apps/control` — réglages avancés et diagnostics.
 
 ## État réel de cette première base
-Le module `apps/engine` est une application Android indépendante qui fournit un menu Rinaorc et un transfert vers Amethyst déjà installé. Elle **ne contient pas encore le code source Amethyst ni ses bibliothèques natives**. Le lancement d'Amethyst ne garantit donc pas à lui seul que le profil 26.3 est sélectionné ou lancé automatiquement. L'intégration interne du moteur et la validation de 26.3 sur le téléphone sont des étapes distinctes.
+Le module `apps/engine` est une application Android indépendante qui fournit un menu Rinaorc et un transfert vers Amethyst déjà installé. Elle **ne contient pas encore le code source Amethyst ni ses bibliothèques natives**. Le lancement d'Amethyst ne garantit donc pas à lui seul que le profil 26.3 est sélectionné ou lancé automatiquement. La validation du runtime Java et du lancement sur le téléphone reste obligatoire.
 
 La branche Amethyst annonce la prise en charge des versions jusqu'à 26.3-snapshot-1, mais son README ne documente des ports OpenJDK mobiles que pour Java 8, 17 et 21. La compatibilité Java requise par cette snapshot doit être vérifiée avant de déclarer le jeu opérationnel.
 
