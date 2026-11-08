@@ -37,9 +37,11 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-      - uses: android-actions/setup-android@v3
       - name: Install Android SDK and NDK
-        run: sdkmanager "platforms;android-37" "build-tools;37.0.0" "ndk;27.3.13750724"
+        run: |
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          yes | "$SDKMANAGER" --licenses >/dev/null
+          "$SDKMANAGER" "platforms;android-37" "build-tools;37.0.0" "ndk;27.3.13750724"
       - name: Clone Amethyst source
         run: git clone --recursive --branch v3_openjdk https://github.com/AngelAuraMC/Amethyst-Android.git .amethyst
       - name: Add Rinaorc 26.3 launch bridge
