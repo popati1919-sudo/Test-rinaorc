@@ -33,7 +33,7 @@ public final class MainActivity extends Activity {
   TextView title=new TextView(this); title.setText("Minecraft Mobile");
   title.setTextColor(Color.WHITE); title.setTextSize(30); title.setGravity(Gravity.CENTER);
   root.addView(title);
-  TextView ver=new TextView(this); ver.setText("Version cible : 26.3-snapshot-1");
+  TextView ver=new TextView(this); ver.setText("Version cible : 26.3");
   ver.setTextColor(Color.LTGRAY); ver.setTextSize(15); root.addView(ver);
 
   TextView caption=new TextView(this); caption.setText("Ton pseudo Rinaorc");
