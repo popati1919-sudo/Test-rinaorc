@@ -198,13 +198,17 @@ public final class MainActivity extends Activity {
             return;
         }
         String pkg = found.substring(0, found.indexOf(" ("));
-        Intent intent = getPackageManager().getLaunchIntentForPackage(pkg);
-        if (intent == null) {
-            Toast.makeText(this, "Impossible d'ouvrir Amethyst.", Toast.LENGTH_LONG).show();
-            return;
+        try {
+            Intent intent = new Intent();
+            intent.setClassName(pkg, "net.kdt.pojavlaunch.RinaorcBridgeActivity");
+            intent.putExtra("net.rinaorc.engine.EXTRA_VERSION", TARGET_VERSION);
+            startActivity(intent);
+        } catch (Exception e) {
+            new AlertDialog.Builder(this)
+                .setTitle("Pont Rinaorc absent")
+                .setMessage("Installe l'APK Amethyst compilé par le workflow Rinaorc pour lancer automatiquement " + TARGET_VERSION + ". Détail : " + e.getMessage())
+                .setPositiveButton("OK", null).show();
         }
-        try { startActivity(intent); }
-        catch (Exception e) { Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show(); }
     }
 
     private void showDiagnostics() {
