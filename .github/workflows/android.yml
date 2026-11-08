@@ -45,13 +45,9 @@ jobs:
         run: |
           SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
           yes | "$SDKMANAGER" --licenses >/dev/null
-          "$SDKMANAGER" --channel=3 "platforms;android-36" "build-tools;36.0.0" "ndk;27.3.13750724"
+          "$SDKMANAGER" --channel=3 "platforms;android-37.1" "build-tools;37.1.0" "ndk;27.3.13750724"
       - name: Clone Amethyst source
         run: git clone --recursive --branch v3_openjdk https://github.com/AngelAuraMC/Amethyst-Android.git .amethyst
-      - name: Align Amethyst compile SDK with available runner platform
-        working-directory: .amethyst
-        run: |
-          grep -RIl "compileSdk = 37" . --include="*.gradle" | xargs -r sed -i 's/compileSdk = 37/compileSdk = 36/g'
       - name: Add Rinaorc 26.3 launch bridge
         run: bash scripts/patch-amethyst.sh "$GITHUB_WORKSPACE/.amethyst"
       - name: Configure Amethyst Java toolchains
